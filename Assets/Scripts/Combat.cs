@@ -8,7 +8,7 @@ public class Combat : MonoBehaviour
     public Transform attackPoint;
     public LayerMask enemyLayers;
     public float attackRange = 0.5f;
-    public int attackDamage = 40;
+    public int attackDamage = 100;
     public float attackCooldown = 1f;
     private float lastAttackTime;
     private int comboState = 0;
@@ -59,33 +59,34 @@ public class Combat : MonoBehaviour
         switch (comboState)
         {
             case 0:
-                animator.SetTrigger("Boxing");
+                animator.SetTrigger("Combo1");
+                lastAttackTime = Time.time;
                 comboState = 1;
                 break;
             case 1:
-                animator.SetTrigger("Hook Punch");
+                animator.SetTrigger("Combo2");
+                lastAttackTime = Time.time;
                 comboState = 2;
                 break;
             case 2:
-                animator.SetTrigger("Kick");
+                animator.SetTrigger("Combo3");
+                lastAttackTime = Time.time;
                 comboState = 0;
                 break;
             default:
                 break;
         }
 
-        // Cambiado de OverlapCircleAll a OverlapSphere
-        // Collider[] hitEnemies = Physics.OverlapSphere(attackPoint.position, attackRange, enemyLayers);
+         Collider[] hitEnemies = Physics.OverlapSphere(attackPoint.position, attackRange, enemyLayers);
 
-        // foreach (Collider enemy in hitEnemies)
-        // {
-            // Asegúrate de que el componente Enemy esté presente en el enemigo
-            // Enemy enemyScript = enemy.GetComponent<Enemy>();
-            // if (enemyScript != null)
-            // {
-                // enemyScript.TakeDamage(attackDamage);
-            // }
-        // }
+         foreach (Collider enemy in hitEnemies)
+         {
+             Enemy enemyScript = enemy.GetComponent<Enemy>();
+             if (enemyScript != null)
+             {
+                 enemyScript.TakeDamage(attackDamage);
+             }
+         }
 
 
         // Informar al script de movimiento que el ataque ha terminado después de un pequeño retraso
