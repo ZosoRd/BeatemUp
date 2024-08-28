@@ -9,6 +9,8 @@ public class Combat : MonoBehaviour
     public LayerMask enemyLayers;
     public float attackRange = 0.5f;
     public int attackDamage = 40;
+    public float attackCooldown = 1f;
+    private float lastAttackTime;
     private int comboState = 0;
     public float maxComboDelay = 1.5f;
     private float comboTimer;
@@ -37,8 +39,12 @@ public class Combat : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Z))
         {
-            Attack();
-            comboTimer = 0f;
+            if (Time.time - lastAttackTime >= attackCooldown)
+            {
+                Attack();
+                lastAttackTime = Time.time;
+                comboTimer = 0f;
+            }
         }
     }
 
