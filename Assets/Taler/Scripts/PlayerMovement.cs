@@ -14,6 +14,7 @@ public class PlayerMovement : MonoBehaviour
     private Rigidbody rb; // Componente Rigidbody del jugador
 
     [SerializeField] string parameterName = "blend";
+    private bool isAttacking; // Variable para saber si el jugador está atacando
 
     void Start()
     {
@@ -29,23 +30,27 @@ public class PlayerMovement : MonoBehaviour
         // Comprobar si el jugador está en el suelo
         isGrounded = Physics.Raycast(transform.position, Vector3.down, groundCheckDistance, groundLayer);
 
-        // Obtener la entrada del usuario para los ejes horizontal y vertical
-        float horizontalInput = Input.GetAxis("Horizontal");
-        float verticalInput = Input.GetAxis("Vertical");
-
-        // Calcular la dirección del movimiento en función de las entradas
-        moveDirection = new Vector3(horizontalInput, 0f, verticalInput).normalized;
-
-        // Actualizar el parámetro de mezcla en el Animator
-        UpdateBlendValue();
-
-        // Mover y rotar al jugador
-        MovePlayer(horizontalInput);
-
-        // Manejar el salto
-        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
+        // Comprobar si el jugador está atacando
+        if (!isAttacking)
         {
-            Jump();
+            // Obtener la entrada del usuario para los ejes horizontal y vertical
+            float horizontalInput = Input.GetAxis("Horizontal");
+            float verticalInput = Input.GetAxis("Vertical");
+
+            // Calcular la dirección del movimiento en función de las entradas
+            moveDirection = new Vector3(horizontalInput, 0f, verticalInput).normalized;
+
+            // Actualizar el parámetro de mezcla en el Animator
+            UpdateBlendValue();
+
+            // Mover y rotar al jugador
+            MovePlayer(horizontalInput);
+
+            // Manejar el salto
+            if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
+            {
+                Jump();
+            }
         }
     }
 
@@ -85,5 +90,11 @@ public class PlayerMovement : MonoBehaviour
         {
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
         }
+    }
+
+    // Métodos públicos para controlar el estado de ataque
+    public void SetAttacking(bool attacking)
+    {
+        isAttacking = attacking;
     }
 }
