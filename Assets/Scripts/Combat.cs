@@ -87,15 +87,11 @@ public class Combat : MonoBehaviour
                  enemyScript.TakeDamage(attackDamage);
              }
          }
-
-
-        // Informar al script de movimiento que el ataque ha terminado después de un pequeño retraso
         StartCoroutine(ResetAttackState());
     }
 
     private IEnumerator ResetAttackState()
     {
-        // Esperar el tiempo de ataque antes de permitir el movimiento nuevamente
         yield return new WaitForSeconds(0.1f);
         if (playerMovement != null)
         {
@@ -108,7 +104,6 @@ public class Combat : MonoBehaviour
         if (attackPoint == null)
             return;
 
-        // Cambiado de DrawWireSphere a DrawWireSphere para 3D
         Gizmos.DrawWireSphere(attackPoint.position, attackRange);
     }
 }
