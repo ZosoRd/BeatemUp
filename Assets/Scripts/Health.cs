@@ -2,30 +2,33 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy : MonoBehaviour
+public class Health : MonoBehaviour
 {
     public int maxHealth = 100;
-    int currentHealth;
+    public int currentHealth;
 
     void Start()
     {
-        currentHealth = maxHealth;
 
+    }
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.O))
+        {
+            TakeDamage(10);
+            Debug.Log("daño");
+        }
     }
 
     public void TakeDamage(int damage)
     {
         currentHealth -= damage;
 
+
         if (currentHealth <= 0)
         {
-            Die();
+            Destroy(gameObject);
         }
-    }
-
-    void Die()
-    {
-        Debug.Log("Enemy died");
-        Destroy(gameObject);
     }
 }

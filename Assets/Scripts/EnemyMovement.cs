@@ -8,6 +8,9 @@ public class EnemyMovement : MonoBehaviour
     public Rigidbody myBody;
     public float speed = 5f;
 
+    public Transform detectionPoint;
+    public float detectionRange = 10f;
+
     public Transform playerTarget;
     public bool followPlayer;
 
@@ -26,6 +29,7 @@ public class EnemyMovement : MonoBehaviour
 
     void Update()
     {
+        DetectPlayer();
         FollowTarget();
     }
 
@@ -36,19 +40,41 @@ public class EnemyMovement : MonoBehaviour
             return;
         }
 
-        // Asegúrate de que el enemigo siempre se alinee horizontalmente con el jugador
         Vector3 targetPosition = playerTarget.position;
-        targetPosition.y = transform.position.y; // Mantener la altura actual
+        targetPosition.y = transform.position.y;
 
-        // Mirar al jugador
         transform.LookAt(targetPosition);
 
-        // Calcular la dirección en el plano horizontal
         Vector3 direction = (targetPosition - transform.position).normalized;
-        direction.y = 0; // Asegúrate de que la dirección solo tenga componentes X e Y
+        direction.y = 0; 
 
-        // Mover en la dirección horizontal
         myBody.velocity = direction * speed;
     }
 
+    public void DetectPlayer()
+    {
+        if (playerTarget ==  null)
+        {
+            return;
+        }
+
+        float distanceToPlayer = Vector3.Distance(transform.position, playerTarget.position);
+
+        if (distanceToPlayer <= detectionRange)
+        {
+            followPlayer = true;
+        }
+        else
+        {
+            followPlayer = false;
+        }
+    }
+
+    void OnDrawGizmosSelected()
+    {
+        if (detectionPoint == null)
+            return;
+
+        Gizmos.DrawWireSphere(detectionPoint.position, detectionRange);
+    }
 }
