@@ -40,10 +40,9 @@ public class EnemyMovement : MonoBehaviour
             return;
         }
 
+
         Vector3 targetPosition = playerTarget.position;
         targetPosition.y = transform.position.y;
-
-        transform.LookAt(targetPosition);
 
         Vector3 direction = (targetPosition - transform.position).normalized;
         direction.y = 0; 
