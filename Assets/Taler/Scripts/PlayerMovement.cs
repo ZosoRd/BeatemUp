@@ -15,6 +15,7 @@ public class PlayerMovement : MonoBehaviour
 
     [SerializeField] string parameterName = "blend";
     private bool isAttacking; // Variable para saber si el jugador está atacando
+    float horizontalInput;
 
     void Start()
     {
@@ -34,7 +35,7 @@ public class PlayerMovement : MonoBehaviour
         if (!isAttacking)
         {
             // Obtener la entrada del usuario para los ejes horizontal y vertical
-            float horizontalInput = Input.GetAxis("Horizontal");
+            horizontalInput = Input.GetAxis("Horizontal");
             float verticalInput = Input.GetAxis("Vertical");
 
             // Calcular la dirección del movimiento en función de las entradas
@@ -43,8 +44,7 @@ public class PlayerMovement : MonoBehaviour
             // Actualizar el parámetro de mezcla en el Animator
             UpdateBlendValue();
 
-            // Mover y rotar al jugador
-            MovePlayer(horizontalInput);
+            
 
             // Manejar el salto
             if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
@@ -52,6 +52,12 @@ public class PlayerMovement : MonoBehaviour
                 Jump();
             }
         }
+    }
+
+    private void FixedUpdate()
+    {
+        // Mover y rotar al jugador
+        MovePlayer(horizontalInput);
     }
 
     void UpdateBlendValue()

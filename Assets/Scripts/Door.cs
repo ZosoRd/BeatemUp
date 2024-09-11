@@ -7,12 +7,13 @@ public class Door : MonoBehaviour
 {
     [SerializeField] UnityEvent onPlayerEnter;
     [SerializeField] UnityEvent onPlayerExit;
+    [SerializeField] UnityEvent onPlayerStay;
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            onPlayerEnter.Invoke();
+            onPlayerEnter?.Invoke();
         }
     }
 
@@ -20,7 +21,15 @@ public class Door : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            onPlayerExit.Invoke();
+            onPlayerExit?.Invoke();
+        }
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            onPlayerStay?.Invoke();
         }
     }
 }
