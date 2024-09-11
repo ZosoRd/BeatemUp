@@ -15,8 +15,7 @@ public class PlayerMovement : MonoBehaviour
 
     [SerializeField] string parameterName = "blend";
     private bool isAttacking; // Variable para saber si el jugador está atacando
-    float horizontalInput;
-
+    float horizontalInput; 
     void Start()
     {
         rb = GetComponent<Rigidbody>();

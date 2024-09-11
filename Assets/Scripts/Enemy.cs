@@ -5,17 +5,24 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
     public int maxHealth = 100;
-    int currentHealth;
+    private int currentHealth;
+    private Animator animator;
 
     void Start()
     {
         currentHealth = maxHealth;
-
+        animator = GetComponent<Animator>(); // Obtén el componente Animator
     }
 
     public void TakeDamage(int damage)
     {
         currentHealth -= damage;
+
+
+        if (animator != null)
+        {
+            animator.SetTrigger("TakeDamage"); // Activa el trigger para la animación de daño
+        }
 
         if (currentHealth <= 0)
         {
@@ -25,7 +32,27 @@ public class Enemy : MonoBehaviour
 
     void Die()
     {
-        Debug.Log("Enemy died");
-        Destroy(gameObject);
+        if (animator != null)
+        {
+            animator.SetTrigger("Die"); // Activa el trigger para la animación de muerte
+        }
+
+        // Inicia la corrutina para destruir el objeto después de la animación
+        StartCoroutine(DestroyAfterAnimation());
+    }
+
+    private IEnumerator DestroyAfterAnimation()
+    {
+        if (animator != null)
+        {
+            // Obtén la duración de la animación de muerte
+            AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+            float animationDuration = stateInfo.length;
+
+            // Espera la duración de la animación de muerte
+            yield return new WaitForSeconds(animationDuration);
+        }
+
+        Destroy(gameObject); // Destruye el objeto después de la animación
     }
 }
